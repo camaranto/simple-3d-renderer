@@ -1,0 +1,3 @@
+# Simple 3d renderer on JAVA
+
+This project is a Java implementation of a simple 3D render engine, based on the tutorial [ How to create your own simple 3D render engine in pure Java](http://blog.rogach.org/2015/08/how-to-create-your-own-simple-3d-render.html), the engine it's capable of producing basic 3D images without relying on external dependencies. The engine utilizes orthographic projection, triangle rasterization, z-buffering, and flat shading to render 3D shapes. The code provides a GUI with sliders to control the rotation of the rendered object. The project focuses on building a foundational understanding of 3D rendering concepts and does not prioritize performance optimizations or more advanced features like textures or complex lighting setups.
