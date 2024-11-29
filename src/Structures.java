@@ -24,6 +24,22 @@ class Triangle {
     }
 }
 
+class Square {
+    Vertex v1;
+    Vertex v2;
+    Vertex v3;
+    Vertex v4;
+    Color color;
+
+    public Square(Vertex v1, Vertex v2, Vertex v3, Vertex v4, Color color) {
+        this.v1 = v1;
+        this.v2 = v2;
+        this.v3 = v3;
+        this.v4 = v4;
+        this.color = color;
+    }
+}
+
 class Matrix3 {
     double[] values;
     Matrix3(double[] values) {
@@ -48,4 +64,26 @@ class Matrix3 {
             in.x * values[2] + in.y * values[5] + in.z * values[8]
         );
     }
+    static Matrix3 MatrixXZ(double angle) {
+        double cos = Math.cos(angle);
+        double sin = Math.sin(angle);
+        Matrix3 xzMatrix = new Matrix3(new double[]{
+            cos, 0, -sin,
+            0, 1, 0,
+            sin, 0, cos
+        });
+        return xzMatrix;
+    }
+
+    static Matrix3 MatrixYZ(double angle) {
+        double cos = Math.cos(angle);
+        double sin = Math.sin(angle);
+        Matrix3 yzMatrix = new Matrix3(new double[]{
+            1, 0, 0,
+            0, cos, sin,
+            0, -sin, cos
+        });
+        return yzMatrix;
+    }
+    
 }

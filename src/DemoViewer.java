@@ -1,7 +1,15 @@
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.util.ArrayList;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.SwingConstants;
 
 class DemoViewer {
     public static void main(String[] args) {
@@ -23,23 +31,45 @@ class DemoViewer {
                 g2.fillRect(0, 0, getWidth(), getHeight());
 
                 // rendering
-                ArrayList<Triangle> tris = new ArrayList<Triangle>();
-                tris.add(new Triangle(new Vertex(100, 100, 100),
-                                new Vertex(-100, -100, 100),
-                                new Vertex(-100, 100, -100),
-                                Color.WHITE));
-                tris.add(new Triangle(new Vertex(100, 100, 100),
-                                new Vertex(-100, -100, 100),
-                                new Vertex(100, -100, -100),
-                                Color.RED));
-                tris.add(new Triangle(new Vertex(-100, 100, -100),
-                                new Vertex(100, -100, -100),
-                                new Vertex(100, 100, 100),
-                                Color.GREEN));
-                tris.add(new Triangle(new Vertex(-100, 100, -100),
-                                new Vertex(100, -100, -100),
-                                new Vertex(-100, -100, 100),
-                                Color.BLUE));
+
+                ArrayList<Square> squares = new ArrayList<Square>();
+                squares.add(new Square(new Vertex(100, 100, 100), 
+                                    new Vertex(-100, 100, 100), 
+                                    new Vertex(-100, -100, 100), 
+                                    new Vertex(100, -100, 100), 
+                                    Color.WHITE));
+                squares.add(new Square(new Vertex(100, 100, -100), 
+                                    new Vertex(-100, 100, -100), 
+                                    new Vertex(-100, -100, -100), 
+                                    new Vertex(100, -100, -100), 
+                                    Color.RED));
+                squares.add(new Square(new Vertex(100, 100, 100), 
+                                    new Vertex(100, 100, -100), 
+                                    new Vertex(-100, 100, -100), 
+                                    new Vertex(-100, 100, 100), 
+                                    Color.GREEN));
+                squares.add(new Square(new Vertex(100, -100, 100), 
+                                    new Vertex(100, -100, -100), 
+                                    new Vertex(-100, -100, -100), 
+                                    new Vertex(-100, -100, 100), 
+                                    Color.BLUE));
+                // ArrayList<Triangle> tris = new ArrayList<Triangle>();
+                // tris.add(new Triangle(new Vertex(100, 100, 100),
+                //                 new Vertex(-100, -100, 100),
+                //                 new Vertex(-100, 100, -100),
+                //                 Color.WHITE));
+                // tris.add(new Triangle(new Vertex(100, 100, 100),
+                //                 new Vertex(-100, -100, 100),
+                //                 new Vertex(100, -100, -100),
+                //                 Color.RED));
+                // tris.add(new Triangle(new Vertex(-100, 100, -100),
+                //                 new Vertex(100, -100, -100),
+                //                 new Vertex(100, 100, 100),
+                //                 Color.GREEN));
+                // tris.add(new Triangle(new Vertex(-100, 100, -100),
+                //                 new Vertex(100, -100, -100),
+                //                 new Vertex(-100, -100, 100),
+                //                 Color.BLUE));
                 // g2.translate(getWidth()/2, getHeight()/2);
                 // g2.setColor(Color.WHITE);
                 // for (Triangle t : tris) {
@@ -50,30 +80,27 @@ class DemoViewer {
                 //     path.closePath();
                 //     g2.draw(path);
                 // }
-                double heading = Math.toRadians(headingSlider.getValue());
-                Matrix3 headingTransform = new Matrix3(new double[]{
-                    Math.cos(heading), 0, -Math.sin(heading),
-                    0, 1, 0,
-                    Math.sin(heading), 0, Math.cos(heading)
-                });
-                double pitch = Math.toRadians(pitchSlider.getValue());
-                Matrix3 pitchTransform = new Matrix3(new double[]{
-                    1, 0, 0,
-                    0, Math.cos(pitch), Math.sin(pitch),
-                    0, -Math.sin(pitch), Math.cos(pitch)
-                });
+                
+                Matrix3 headingTransform = Matrix3.MatrixXZ(Math.toRadians(headingSlider.getValue()));
+                Matrix3 pitchTransform = Matrix3.MatrixYZ(Math.toRadians(pitchSlider.getValue()));
                 Matrix3 transform = headingTransform.multiply(pitchTransform);
+
+                //BufferedImage img = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
 
                 g2.translate(getWidth() / 2, getHeight() / 2);
                 g2.setColor(Color.WHITE);
-                for (Triangle t : tris) {
-                    Vertex v1 = transform.transform(t.v1);
-                    Vertex v2 = transform.transform(t.v2);
-                    Vertex v3 = transform.transform(t.v3);
+                for (Square s : squares) {
+                    Vertex v1 = transform.transform(s.v1);
+                    Vertex v2 = transform.transform(s.v2);
+                    Vertex v3 = transform.transform(s.v3);
+                    Vertex v4 = transform.transform(s.v4);
+                    
+
                     Path2D path = new Path2D.Double();
                     path.moveTo(v1.x, v1.y);
                     path.lineTo(v2.x, v2.y);
                     path.lineTo(v3.x, v3.y);
+                    path.lineTo(v4.x, v4.y);
                     path.closePath();
                     g2.draw(path);
                 }
