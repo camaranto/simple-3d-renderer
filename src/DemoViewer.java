@@ -27,7 +27,7 @@ class DemoViewer {
                 tris.add(new Triangle(new Vertex(100, 100, 100),
                                 new Vertex(-100, -100, 100),
                                 new Vertex(-100, 100, -100),
-                Color.WHITE));
+                                Color.WHITE));
                 tris.add(new Triangle(new Vertex(100, 100, 100),
                                 new Vertex(-100, -100, 100),
                                 new Vertex(100, -100, -100),
@@ -62,7 +62,6 @@ class DemoViewer {
                     0, Math.cos(pitch), Math.sin(pitch),
                     0, -Math.sin(pitch), Math.cos(pitch)
                 });
-
                 Matrix3 transform = headingTransform.multiply(pitchTransform);
 
                 g2.translate(getWidth() / 2, getHeight() / 2);
@@ -74,7 +73,7 @@ class DemoViewer {
                     Path2D path = new Path2D.Double();
                     path.moveTo(v1.x, v1.y);
                     path.lineTo(v2.x, v2.y);
-                    path.lineTo(v3.x, v3.x);
+                    path.lineTo(v3.x, v3.y);
                     path.closePath();
                     g2.draw(path);
                 }

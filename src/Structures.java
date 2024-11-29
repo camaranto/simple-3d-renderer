@@ -9,7 +9,6 @@ class Vertex {
         this.y = y;
         this.z = z;
     }
-    
 }
 
 class Triangle {
