@@ -31,44 +31,44 @@ class DemoViewer {
                 g2.fillRect(0, 0, getWidth(), getHeight());
 
                 // rendering
-
+                double size = 100; 
                 ArrayList<Square> squares = new ArrayList<Square>();
-                squares.add(new Square(new Vertex(100, 100, 100), 
-                                    new Vertex(-100, 100, 100), 
-                                    new Vertex(-100, -100, 100), 
-                                    new Vertex(100, -100, 100), 
+                squares.add(new Square(new Vertex(size, size, size), 
+                                    new Vertex(-size, size, size), 
+                                    new Vertex(-size, -size, size), 
+                                    new Vertex(size, -size, size), 
                                     Color.WHITE));
-                squares.add(new Square(new Vertex(100, 100, -100), 
-                                    new Vertex(-100, 100, -100), 
-                                    new Vertex(-100, -100, -100), 
-                                    new Vertex(100, -100, -100), 
+                squares.add(new Square(new Vertex(size, size, -size), 
+                                    new Vertex(-size, size, -size), 
+                                    new Vertex(-size, -size, -size), 
+                                    new Vertex(size, -size, -size), 
                                     Color.RED));
-                squares.add(new Square(new Vertex(100, 100, 100), 
-                                    new Vertex(100, 100, -100), 
-                                    new Vertex(-100, 100, -100), 
-                                    new Vertex(-100, 100, 100), 
+                squares.add(new Square(new Vertex(size, size, size), 
+                                    new Vertex(size, size, -size), 
+                                    new Vertex(-size, size, -size), 
+                                    new Vertex(-size, size, size), 
                                     Color.GREEN));
-                squares.add(new Square(new Vertex(100, -100, 100), 
-                                    new Vertex(100, -100, -100), 
-                                    new Vertex(-100, -100, -100), 
-                                    new Vertex(-100, -100, 100), 
+                squares.add(new Square(new Vertex(size, -size, size), 
+                                    new Vertex(size, -size, -size), 
+                                    new Vertex(-size, -size, -size), 
+                                    new Vertex(-size, -size, size), 
                                     Color.BLUE));
                 // ArrayList<Triangle> tris = new ArrayList<Triangle>();
-                // tris.add(new Triangle(new Vertex(100, 100, 100),
-                //                 new Vertex(-100, -100, 100),
-                //                 new Vertex(-100, 100, -100),
+                // tris.add(new Triangle(new Vertex(size, size, size),
+                //                 new Vertex(-size, -size, size),
+                //                 new Vertex(-size, size, -size),
                 //                 Color.WHITE));
-                // tris.add(new Triangle(new Vertex(100, 100, 100),
-                //                 new Vertex(-100, -100, 100),
-                //                 new Vertex(100, -100, -100),
+                // tris.add(new Triangle(new Vertex(size, size, size),
+                //                 new Vertex(-size, -size, size),
+                //                 new Vertex(size, -size, -size),
                 //                 Color.RED));
-                // tris.add(new Triangle(new Vertex(-100, 100, -100),
-                //                 new Vertex(100, -100, -100),
-                //                 new Vertex(100, 100, 100),
+                // tris.add(new Triangle(new Vertex(-size, size, -size),
+                //                 new Vertex(size, -size, -size),
+                //                 new Vertex(size, size, size),
                 //                 Color.GREEN));
-                // tris.add(new Triangle(new Vertex(-100, 100, -100),
-                //                 new Vertex(100, -100, -100),
-                //                 new Vertex(-100, -100, 100),
+                // tris.add(new Triangle(new Vertex(-size, size, -size),
+                //                 new Vertex(size, -size, -size),
+                //                 new Vertex(-size, -size, size),
                 //                 Color.BLUE));
                 // g2.translate(getWidth()/2, getHeight()/2);
                 // g2.setColor(Color.WHITE);
