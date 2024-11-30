@@ -25,6 +25,9 @@ class DemoViewer {
         JSlider pitchSlider = new JSlider(SwingConstants.VERTICAL, -90, 90, 0);
         pane.add(pitchSlider, BorderLayout.EAST);
 
+        JSlider zoom = new JSlider( SwingConstants.VERTICAL, 50, 200, 100);
+        pane.add(zoom, BorderLayout.WEST);
+
         JPanel renderPanel = new JPanel(){
             public void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g;
@@ -32,7 +35,7 @@ class DemoViewer {
                 g2.fillRect(0, 0, getWidth(), getHeight());
 
                 // rendering
-                double size = 100; 
+                double size = zoom.getValue(); 
                 // ArrayList<Square> squares = new ArrayList<Square>();
                 // squares.add(new Square(new Vertex(size, size, size), 
                 //                     new Vertex(-size, size, size), 
@@ -148,6 +151,7 @@ class DemoViewer {
 
         headingSlider.addChangeListener(e -> renderPanel.repaint());
         pitchSlider.addChangeListener(e ->renderPanel.repaint());
+        zoom.addChangeListener(e -> renderPanel.repaint());
 
         frame.setSize(400, 400);
         frame.setVisible(true);
