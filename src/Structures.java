@@ -69,8 +69,8 @@ class Matrix3 {
         double sin = Math.sin(angle);
         Matrix3 xzMatrix = new Matrix3(new double[]{
             cos, 0, -sin,
-            0, 1, 0,
-            sin, 0, cos
+            0,   1,   0,
+            sin, 0,  cos
         });
         return xzMatrix;
     }
@@ -79,8 +79,8 @@ class Matrix3 {
         double cos = Math.cos(angle);
         double sin = Math.sin(angle);
         Matrix3 yzMatrix = new Matrix3(new double[]{
-            1, 0, 0,
-            0, cos, sin,
+            1,   0,   0,
+            0,  cos, sin,
             0, -sin, cos
         });
         return yzMatrix;

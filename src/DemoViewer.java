@@ -1,32 +1,52 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.function.Function;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 
+
 class DemoViewer {
     public static void main(String[] args) {
-        JFrame frame = new JFrame();
+        JFrame frame = new JFrame("Simple 3D renderer");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         Container pane = frame.getContentPane();
-        pane.setLayout(new BorderLayout());
+        JPanel controlPanel = new JPanel();
+
+        controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.Y_AXIS));
+        controlPanel.setPreferredSize(new Dimension(400, 400));
+
+        JSlider zoom = new JSlider( SwingConstants.HORIZONTAL, 50, 200, 100);
+        JSlider pitchSlider = new JSlider(SwingConstants.HORIZONTAL, -90, 90, 0);
+        JSlider headingSlider = new JSlider(SwingConstants.HORIZONTAL,-180, 180, 0);
+        JLabel textAxisY = new JLabel("Rotation y-axis");
+        JLabel textAxisX = new JLabel("Rotation x-axis");
+        JLabel textZoom = new JLabel("Zoom");
+        Function<Integer, Component> createRigidArea = x -> Box.createRigidArea(new Dimension(0, x));
 
 
-        JSlider headingSlider = new JSlider(-180, 180, 0);
-        pane.add(headingSlider, BorderLayout.SOUTH);
-
-        JSlider pitchSlider = new JSlider(SwingConstants.VERTICAL, -90, 90, 0);
-        pane.add(pitchSlider, BorderLayout.EAST);
-
-        JSlider zoom = new JSlider( SwingConstants.VERTICAL, 50, 200, 100);
-        pane.add(zoom, BorderLayout.WEST);
+        controlPanel.add(createRigidArea.apply(20));
+        controlPanel.add(textAxisX);
+        controlPanel.add(headingSlider);
+        controlPanel.add(createRigidArea.apply(20));
+        controlPanel.add(textAxisY);
+        controlPanel.add(pitchSlider);
+        controlPanel.add(createRigidArea.apply(20));
+        controlPanel.add(textZoom);
+        controlPanel.add(zoom);
 
         JPanel renderPanel = new JPanel(){
             public void paintComponent(Graphics g) {
@@ -147,13 +167,16 @@ class DemoViewer {
                 
             }
         };
-        pane.add(renderPanel, BorderLayout.CENTER);
+
+        renderPanel.setPreferredSize(new Dimension(400, 400));
+        pane.add(renderPanel, BorderLayout.WEST);
+        pane.add(controlPanel, BorderLayout.EAST);
 
         headingSlider.addChangeListener(e -> renderPanel.repaint());
         pitchSlider.addChangeListener(e ->renderPanel.repaint());
         zoom.addChangeListener(e -> renderPanel.repaint());
 
-        frame.setSize(400, 400);
+        frame.setSize(800, 400);
         frame.setVisible(true);
 
         
