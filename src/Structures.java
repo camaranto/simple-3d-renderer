@@ -17,6 +17,10 @@ class Vertex {
     public int[] getPointsInt() {
         return new int[]{(int)this.x, (int)this.y, (int)this.z};
     }
+
+    public double dotProduct(Vertex other){
+        return this.x * other.x + this.y * other.y + this.z * other.z;
+    }
 }
 
 class Triangle {
@@ -101,6 +105,10 @@ class UtilsMath {
 
     public static double dotProduct(Vertex a, Vertex b) {
         return a.x * b.x + a.y * b.y + a.z * b.z;
+    }
+
+    public static double norm(Vertex v){
+        return Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
     }
 }
 

@@ -171,6 +171,8 @@ class DemoViewer {
                     norm.y /= normalLength;
                     norm.z /= normalLength;
 
+
+                    // TODO: implement the real calculation of the cosine angle
                     double angleCos = Math.abs(UtilsMath.dotProduct(lightVector, norm));
 
                     int minX = (int) Math.max(0, Math.ceil(Math.min(v1.x, Math.min(v2.x, v3.x))));
