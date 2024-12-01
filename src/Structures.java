@@ -11,6 +11,14 @@ class Vertex {
         this.y = y;
         this.z = z;
     }
+
+    public double[] getPoints(){
+        return new double[] {this.x, this.y, this.z};
+    }
+
+    public int[] getPointsInt() {
+        return new int[]{(int)this.x, (int)this.y, (int)this.z};
+    }
 }
 
 class Triangle {
@@ -90,6 +98,14 @@ class Matrix3 {
     
 }
 
+class UtilsMath {
+    UtilsMath() {}
+
+    public static double dotProduct(Vertex a, Vertex b) {
+        return a.x * b.x + a.y * b.y + a.z * b.z;
+    }
+}
+
 class Shading {
     Shading() {}
 
@@ -102,5 +118,12 @@ class Shading {
         int green = (int) Math.pow(greenLinear, 1/2.4);
         int blue = (int) Math.pow(blueLinear, 1/2.4);
         return new Color(red, green, blue);
+    }
+
+    public static Vertex calculateLightVector(double theta, double phi){
+        double sinPhi = Math.sin(phi);
+        double x = sinPhi * Math.cos(theta);
+        double y = sinPhi * Math.sin(theta);
+        return new Vertex(x, y, Math.cos(phi));
     }
 }

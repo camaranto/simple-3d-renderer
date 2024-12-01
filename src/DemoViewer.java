@@ -5,6 +5,8 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.geom.Path2D;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.function.Function;
@@ -32,9 +34,13 @@ class DemoViewer {
         JSlider zoom = new JSlider( SwingConstants.HORIZONTAL, 50, 200, 100);
         JSlider pitchSlider = new JSlider(SwingConstants.HORIZONTAL, -90, 90, 0);
         JSlider headingSlider = new JSlider(SwingConstants.HORIZONTAL,-180, 180, 0);
+        JSlider phiSlider = new JSlider(SwingConstants.HORIZONTAL, 0, 90, 0);
+        JSlider thetaSlider = new JSlider(SwingConstants.HORIZONTAL, 0, 180, 0);
         JLabel textAxisY = new JLabel("Rotation y-axis");
         JLabel textAxisX = new JLabel("Rotation x-axis");
         JLabel textZoom = new JLabel("Zoom");
+        JLabel textTheta = new JLabel("θ");
+        JLabel textPhi = new JLabel("ϕ");
         Function<Integer, Component> createRigidArea = x -> Box.createRigidArea(new Dimension(0, x));
 
 
@@ -47,12 +53,33 @@ class DemoViewer {
         controlPanel.add(createRigidArea.apply(20));
         controlPanel.add(textZoom);
         controlPanel.add(zoom);
+        controlPanel.add(createRigidArea.apply(30));
+        controlPanel.add(textPhi);
+        controlPanel.add(phiSlider);
+        controlPanel.add(createRigidArea.apply(20));
+        controlPanel.add(textTheta);
+        controlPanel.add(thetaSlider);
+
+        Vertex triangleXx = new Vertex(60, 60, 65);
+        Vertex triangleXy = new Vertex(17, 23, 20);
+        Vertex triangleYx = new Vertex(17, 23, 20);
+        Vertex triangleYy = new Vertex(60, 60, 65);
 
         JPanel renderPanel = new JPanel(){
             public void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setColor(Color.BLACK);
                 g2.fillRect(0, 0, getWidth(), getHeight());
+
+                Path2D lineX = new Path2D.Double();
+                Path2D lineY = new Path2D.Double();
+                // Path2D lineZ = new Path2D.Double();
+
+                lineX.moveTo(20, 20);
+                lineY.moveTo(20, 20);
+                lineX.lineTo(60, 20);
+                lineY.lineTo(20, 60);
+
 
                 // rendering
                 double size = zoom.getValue(); 
@@ -109,6 +136,8 @@ class DemoViewer {
                 Matrix3 pitchTransform = Matrix3.MatrixYZ(Math.toRadians(pitchSlider.getValue()));
                 Matrix3 transform = headingTransform.multiply(pitchTransform);
 
+                Vertex lightVector = Shading.calculateLightVector(Math.toRadians(thetaSlider.getValue()), Math.toRadians(phiSlider.getValue()));
+
                 BufferedImage img = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
 
                 double[] zBuffer = new double[img.getWidth() * img.getHeight()];
@@ -143,7 +172,7 @@ class DemoViewer {
                     norm.y /= normalLength;
                     norm.z /= normalLength;
 
-                    double angleCos = Math.abs(norm.z);
+                    double angleCos = Math.abs(UtilsMath.dotProduct(lightVector, norm));
 
                     int minX = (int) Math.max(0, Math.ceil(Math.min(v1.x, Math.min(v2.x, v3.x))));
                     int maxX = (int) Math.min(img.getWidth() - 1, Math.floor(Math.max(v1.x, Math.max(v2.x, v3.x))));
@@ -175,6 +204,12 @@ class DemoViewer {
                     // path.closePath();
                 }
                 g2.drawImage(img, 0, 0, null);
+                g2.setColor(Color.RED);
+                g2.drawPolygon(triangleYx.getPointsInt(), triangleYy.getPointsInt(), 3);
+                g2.draw(lineY);
+                g2.setColor(Color.GREEN);
+                g2.draw(lineX);
+                g2.drawPolygon(triangleXx.getPointsInt(), triangleXy.getPointsInt(), 3);
                 
             }
         };
@@ -186,6 +221,9 @@ class DemoViewer {
         headingSlider.addChangeListener(e -> renderPanel.repaint());
         pitchSlider.addChangeListener(e ->renderPanel.repaint());
         zoom.addChangeListener(e -> renderPanel.repaint());
+        thetaSlider.addChangeListener(e -> renderPanel.repaint());
+        phiSlider.addChangeListener(e -> renderPanel.repaint());
+        
 
         frame.setSize(800, 400);
         frame.setVisible(true);
