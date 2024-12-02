@@ -33,13 +33,15 @@ class DemoViewer {
         JSlider zoom = new JSlider( SwingConstants.HORIZONTAL, 50, 200, 100);
         JSlider pitchSlider = new JSlider(SwingConstants.HORIZONTAL, -90, 90, 0);
         JSlider headingSlider = new JSlider(SwingConstants.HORIZONTAL,-180, 180, 0);
-        JSlider phiSlider = new JSlider(SwingConstants.HORIZONTAL, 0, 90, 0);
-        JSlider thetaSlider = new JSlider(SwingConstants.HORIZONTAL, 0, 180, 0);
+        JSlider lightSourceX = new JSlider(SwingConstants.HORIZONTAL, 0, 180, 0);
+        JSlider lightSourceY = new JSlider(SwingConstants.HORIZONTAL, 0, 180, 0);
+        JSlider lightSourceZ = new JSlider(SwingConstants.HORIZONTAL, 0, 180, 90);
         JLabel textAxisY = new JLabel("Rotation y-axis");
         JLabel textAxisX = new JLabel("Rotation x-axis");
         JLabel textZoom = new JLabel("Zoom");
-        JLabel textTheta = new JLabel("θ");
-        JLabel textPhi = new JLabel("ϕ");
+        JLabel textLightSourceX = new JLabel("Light source x-position");
+        JLabel textLightSourceY = new JLabel("Light source y-position");
+        JLabel textLightSourceZ = new JLabel("Light source z-position");
         Function<Integer, Component> createRigidArea = x -> Box.createRigidArea(new Dimension(0, x));
 
 
@@ -53,11 +55,14 @@ class DemoViewer {
         controlPanel.add(textZoom);
         controlPanel.add(zoom);
         controlPanel.add(createRigidArea.apply(30));
-        controlPanel.add(textPhi);
-        controlPanel.add(phiSlider);
+        controlPanel.add(textLightSourceX);
+        controlPanel.add(lightSourceX);
         controlPanel.add(createRigidArea.apply(20));
-        controlPanel.add(textTheta);
-        controlPanel.add(thetaSlider);
+        controlPanel.add(textLightSourceY);
+        controlPanel.add(lightSourceY);
+        controlPanel.add(createRigidArea.apply(20));
+        controlPanel.add(textLightSourceZ);
+        controlPanel.add(lightSourceZ);
 
         Vertex triangleXx = new Vertex(60, 60, 65);
         Vertex triangleXy = new Vertex(17, 23, 20);
@@ -135,7 +140,11 @@ class DemoViewer {
                 Matrix3 pitchTransform = Matrix3.MatrixYZ(Math.toRadians(pitchSlider.getValue()));
                 Matrix3 transform = headingTransform.multiply(pitchTransform);
 
-                Vertex lightVector = Shading.calculateLightVector(Math.toRadians(thetaSlider.getValue()), Math.toRadians(phiSlider.getValue()));
+                Vertex lightVector = new Vertex(
+                    Math.toRadians(lightSourceX.getValue()), 
+                    Math.toRadians(lightSourceY.getValue()), 
+                    Math.toRadians(lightSourceZ.getValue())
+                );
 
                 BufferedImage img = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
 
@@ -166,14 +175,14 @@ class DemoViewer {
                         ab.z * ac.x - ab.x * ac.z,
                         ab.x * ac.y - ab.y * ac.x
                     );
-                    double normalLength = Math.sqrt(norm.x * norm.x + norm.y * norm.y + norm.z * norm.z);
-                    norm.x /= normalLength;
-                    norm.y /= normalLength;
-                    norm.z /= normalLength;
+                    //double normalLength = Math.sqrt(norm.x * norm.x + norm.y * norm.y + norm.z * norm.z);
+                    // norm.x /= normalLength;
+                    // norm.y /= normalLength;
+                    // norm.z /= normalLength;
 
-
-                    // TODO: implement the real calculation of the cosine angle
-                    double angleCos = Math.abs(UtilsMath.dotProduct(lightVector, norm));
+                    double angleCos = Math.abs(
+                        UtilsMath.dotProduct(lightVector, norm) / (UtilsMath.norm(norm) * UtilsMath.norm(lightVector))
+                    );
 
                     int minX = (int) Math.max(0, Math.ceil(Math.min(v1.x, Math.min(v2.x, v3.x))));
                     int maxX = (int) Math.min(img.getWidth() - 1, Math.floor(Math.max(v1.x, Math.max(v2.x, v3.x))));
@@ -222,8 +231,9 @@ class DemoViewer {
         headingSlider.addChangeListener(e -> renderPanel.repaint());
         pitchSlider.addChangeListener(e ->renderPanel.repaint());
         zoom.addChangeListener(e -> renderPanel.repaint());
-        thetaSlider.addChangeListener(e -> renderPanel.repaint());
-        phiSlider.addChangeListener(e -> renderPanel.repaint());
+        lightSourceY.addChangeListener(e -> renderPanel.repaint());
+        lightSourceX.addChangeListener(e -> renderPanel.repaint());
+        lightSourceZ.addChangeListener(e -> renderPanel.repaint());
         
 
         frame.setSize(800, 400);
