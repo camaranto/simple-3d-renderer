@@ -135,6 +135,12 @@ class DemoViewer {
                 //     path.closePath();
                 //     g2.draw(path);
                 // }
+
+                // System.out.println("size: " + size);
+
+                for (int i = 0; i < 4; i++) {
+                    tris = Shading.inflate(tris);
+                }
                 
                 Matrix3 headingTransform = Matrix3.MatrixXZ(Math.toRadians(headingSlider.getValue()));
                 Matrix3 pitchTransform = Matrix3.MatrixYZ(Math.toRadians(pitchSlider.getValue()));
